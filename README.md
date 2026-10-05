@@ -9,8 +9,18 @@
 `.dsh-trash/` 第一层的条目有「恢复」「彻底删除」，也能「移动」到别处（等于恢复到指定位置）；
 工具栏可**清空回收站**；超过保留期的条目由宿主自动清理。
 
-> 下载 / 打包 ZIP 部分移植自社区插件 [dsh-file-download](https://github.com/lorsabyan/dsh-file-download)
-> （MIT © 2026 Aghasi Lorsabyan，见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)）；其余为原创。
+```sh
+dsh plugin --profile web add "github:jamesct/dsh-file-manager"
+```
+
+| | |
+|:--|:--|
+| 适用 profile | **`web`** |
+| 最低 DSH 版本 | **`0.2.0-rc.2`**（本插件的开发与验证所用版本） |
+| 许可证 | **MIT** © 2026 jamesct —— 下载 / 打包 ZIP 部分移植自社区插件 [dsh-file-download](https://github.com/lorsabyan/dsh-file-download)（MIT © 2026 Aghasi Lorsabyan），完整版权与许可全文见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) |
+| 配置 | 侧栏「插件」→ 本插件卡片，或 `<DSH_HOME>/file-manager.yml`（**保存即生效**，不用重启） |
+
+> 新增 bundle 要**重启一次 dsh** 才生效（可加载的模块解析表在启动时冻结）；之后只改客户端半刷新页面即可。
 
 ## 项目结构
 
