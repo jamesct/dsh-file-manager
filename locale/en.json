@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "File manager",
+    "description": "Row actions for the workspace file tree: trash and restore, download and ZIP packaging, move, rename, create folders, and multi-select batching; its settings form lives here too."
+  }
+}

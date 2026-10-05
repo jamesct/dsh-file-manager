@@ -1,0 +1,65 @@
+# dsh-file-manager 配置
+#
+# 位置：<DSH_HOME>/file-manager.yml（可用环境变量 DSH_FILE_MANAGER_CONFIG 覆盖）
+# 生效：保存即生效（宿主半每次请求比对 mtime），不用重启。
+#
+# ⚠️ 所有 path 一律写**绝对路径**（旧版的 base 已移除）。
+# ⚠️ 两种模式**互斥**，用 mode 选；另一个模式的段会被忽略并在 GET /config 的 warnings 里提示。
+
+mode: paths                    # paths（默认）| workspace
+
+# ── mode: paths：显式列出允许「管理」（删除 / 重命名 / 移动 / 新建）的目录 ─────────
+# 可写多条；每条可以裸写字符串（等于 recursive: false）或写成映射。
+manage:
+  - path: /srv/data/reports
+    recursive: true            # true = 任意深度；false = 只管直接子项
+
+# ── mode: workspace：自动覆盖**所有已注册工作区**，不用写路径 ─────────────────────
+# 根的来源是 dsh 的工作区服务（workspaceRegistry）：换工作区、加工作区都不用改配置。
+# 拿不到这个服务时只给一条 warning，不产生任何根（插件照常激活）。
+#
+# workspace:
+#   scope: all                 # 目前只支持 all（= 所有工作区）
+#   recursive: true            # 工作区根之下任意深度都可管
+#   disable:                   # 禁止管理的清单（相对该工作区根）
+#     - .git                   # 不含 / 的名字 = 挡**任意深度**的同名目录（嵌套子仓库的 .git 也挡）
+#     - node_modules
+#     - data/archive           # 含 / 的 = 从工作区根算起，只挡这一个位置
+
+# ── 与模式无关 ────────────────────────────────────────────────────────────────
+retention_days: 7              # 进回收站后保留几天
+cleanup_interval_hours: 6      # 自动清理的检查间隔（分钟级检查 + 这个间隔才真清）
+auto_cleanup: true             # false = 关掉自动清理（回收站只增不减，只能人工「彻底删除 / 清空」）
+cross_workspace: true          # 移动/复制/新建能不能选到**其它允许根**（别的已注册工作区）；默认 true。
+                               # 关掉后只能在当前文件树所在的工作区里操作，宿主也会拒绝越界目标。
+trash_dirname: .dsh-trash      # 回收站目录名；**每个根各一个**（同盘 rename，原子）
+
+# 行上显示哪些东西（顺序无关；从右往左排 = download / trash / mtime / size）：
+#   download = 文件「下载」、目录「打包 ZIP」
+#   trash    = 「删除」（**只**管删除；回收站里的「恢复 / 彻底删除 / 移动到…」不受它影响）
+#   mtime    = 修改时间（绝对时间，文件与目录都有）
+#   size     = 文件大小（**只对文件**；上游不给目录大小）
+row_show:
+  - download
+
+# 工具栏显示哪些项（默认全部；不勾的就不出现）。取值：
+#   multi 多选 / mkdir 新建文件夹 / zip_root 打包根目录 / empty_trash 清空回收站
+#   download 下载 / delete 删除 / rename 重命名 / restore 恢复 / purge 彻底删除 / move 复制移动 / clear 清空选择
+toolbar_show:
+  - multi
+  - mkdir
+  - zip_root
+  - empty_trash
+  - download
+  - delete
+  - rename
+  - restore
+  - purge
+  - move
+  - clear
+
+# ── 回收站布局（仅供理解，不用配置）──────────────────────────────────────────
+# 镜像布局：<root>/.dsh-trash/<原相对路径>
+#   例：删掉 /srv/data/reports/日报/x.md
+#       → 落点 /srv/data/reports/.dsh-trash/日报/x.md（出处一眼可见）
+#   同名冲突只给基名加时间戳后缀；恢复/彻底删除在回收站里**任意深度**都可用。

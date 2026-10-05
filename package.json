@@ -1,0 +1,62 @@
+{
+  "name": "dsh-file-manager",
+  "version": "0.2.0",
+  "description": "File-tree toolbox: trash can and restore, download and ZIP packaging, move, rename, create folders, multi-select batching, plus an in-page settings form.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesct/dsh-file-manager.git"
+  },
+  "homepage": "https://github.com/jamesct/dsh-file-manager#readme",
+  "bugs": {
+    "url": "https://github.com/jamesct/dsh-file-manager/issues"
+  },
+  "author": "jamesct",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "lib",
+    "locale/*.json",
+    "cordis.patch.yml",
+    "README.md",
+    "THIRD-PARTY-NOTICES.md"
+  ],
+  "scripts": {
+    "test": "node test/host.mjs && node test/client.mjs",
+    "test:host": "node test/host.mjs",
+    "test:client": "node test/client.mjs"
+  },
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  },
+  "license": "MIT",
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "file-manager",
+    "trash",
+    "download",
+    "zip",
+    "rename",
+    "move"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "slots"
+      ]
+    }
+  }
+}

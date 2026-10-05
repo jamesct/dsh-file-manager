@@ -1,0 +1,7 @@
+# 依赖（宿主半会 import("yaml")，跑测试前 npm i）
+node_modules/
+
+# 临时产物
+temp/
+test/.tmp/
+*.bak.*
